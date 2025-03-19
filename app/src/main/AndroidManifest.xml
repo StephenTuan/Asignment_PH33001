@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginScreen"/>
+        <activity android:name=".SignUp"/>
+        <activity android:name=".HomeScreen"/>
     </application>
 
 </manifest>

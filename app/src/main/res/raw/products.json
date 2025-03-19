@@ -1,0 +1,106 @@
+{
+  "categories": [
+    {
+      "name": "iPhone",
+      "products": [
+        {
+          "id": 1,
+          "name": "iPhone 15 Pro Max",
+          "price": 1199,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        },
+        {
+          "id": 2,
+          "name": "iPhone 14 Pro",
+          "price": 999,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        },
+        {
+          "id": 3,
+          "name": "iPhone 13 Pro",
+          "price": 999,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        },
+        {
+          "id": 4,
+          "name": "iPhone 12 Pro",
+          "price": 999,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        },
+        {
+          "id": 5,
+          "name": "iPhone 11 Pro",
+          "price": 999,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        },
+        {
+          "id": 6,
+          "name": "iPhone X",
+          "price": 999,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        }
+      ]
+    },
+    {
+      "name": "iPad",
+      "products": [
+        {
+          "id": 7,
+          "name": "iPad Pro M2",
+          "price": 1099,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        },
+        {
+          "id": 8,
+          "name": "iPad Pro M1",
+          "price": 1099,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        }
+      ]
+    },
+    {
+      "name": "Mac Studio",
+      "products": [
+        {
+          "id": 9,
+          "name": "Mac Studio M2 Ultra",
+          "price": 3999,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        }
+      ]
+    },
+    {
+      "name": "Mac Mini",
+      "products": [
+        {
+          "id": 10,
+          "name": "Mac Mini M2",
+          "price": 799,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        }
+      ]
+    },
+    {
+      "name": "AirPods",
+      "products": [
+        {
+          "id": 11,
+          "name": "AirPods Pro 2",
+          "price": 249,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        }
+      ]
+    },
+    {
+      "name": "Mac Display",
+      "products": [
+        {
+          "id": 12,
+          "name": "Studio Display",
+          "price": 1599,
+          "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-thien-nhien-dep-3d.html&psig=AOvVaw3IuYo5ndlhoradc-6HW7WB&ust=1742460819318000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPCQueXilYwDFQAAAAAdAAAAABAE"
+        }
+      ]
+    }
+  ]
+}

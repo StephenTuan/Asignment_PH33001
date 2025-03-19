@@ -1,10 +1,12 @@
 package com.example.assignment_ph33001
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -18,19 +20,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.example.assignment_ph33001.ui.theme.Assignment_PH33001Theme
 import com.example.assignment_ph33001.ui.theme.GelasioMedium
 
 class LoginScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             Assignment_PH33001Theme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    LoginContent()
+                    LoginContent(
+                        Navigate1 = {startActivity(Intent(this, SignUp::class.java))},
+                        Navigate2 = {startActivity(Intent(this, HomeScreen::class.java))}
+                    )
                 }
             }
         }
@@ -38,12 +46,15 @@ class LoginScreen : ComponentActivity() {
 }
 
 @Composable
-fun LoginContent() {
+fun LoginContent(Navigate1: () -> Unit, Navigate2: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(Color.White) // ✅ Đặt màu nền
+                .systemBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // Ảnh Logo
@@ -126,13 +137,25 @@ fun LoginContent() {
                     Spacer(modifier = Modifier.height(12.dp))
 
                     OutlinedTextField(
-
                         value = password,
                         onValueChange = { password = it },
                         label = { Text("Password") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        visualTransformation = PasswordVisualTransformation(),
-                        modifier = Modifier.fillMaxWidth()
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            val image = if (passwordVisible)
+                                painterResource(id = R.drawable.baseline_visibility_24)
+                            else
+                                painterResource(id = R.drawable.baseline_visibility_off_24)
+
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Image(
+                                    painter = image,
+                                    contentDescription = "Toggle password visibility"
+                                )
+                            }
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -153,17 +176,18 @@ fun LoginContent() {
                     )
 
                     Button(
-                        onClick = {},
+                        onClick = { Navigate2() },
                         modifier = Modifier
                             .padding(start = 30.dp, end = 30.dp)
                             .height(45.dp)
+                            .shadow(8.dp, shape = MaterialTheme.shapes.medium)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.backgroundButtonOb)),
                         shape = MaterialTheme.shapes.small
                     )
                     {
                         Text(
-                            text = "Log in",
+                            text = "LOGIN",
                             fontSize = 17.sp,
                             fontFamily = GelasioMedium,
                             fontWeight = FontWeight.Medium,
@@ -172,10 +196,14 @@ fun LoginContent() {
                     }
 
                     Text(
-                        modifier = Modifier.padding(top = 30.dp),
+                        modifier = Modifier.padding(top = 30.dp)
+                            .clickable {
+                                Navigate1()
+                            },
                         text = "SIGN UP",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+
                     )
                 }
             }
@@ -184,12 +212,5 @@ fun LoginContent() {
 
     }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewLoginScreen() {
-    Assignment_PH33001Theme {
-        LoginContent()
-    }
-}
 
 
