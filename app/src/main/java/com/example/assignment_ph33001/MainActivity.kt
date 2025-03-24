@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,7 +63,7 @@ fun onBoarding(modifier: Modifier = Modifier, onNavigate: () -> Unit) {
     ) {
 
         Image(
-            painter = painterResource(id = R.drawable.maskgroup),
+            painter = painterResource(id = R.drawable.background),
             contentDescription = "Background Image",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -83,46 +84,47 @@ fun onBoarding(modifier: Modifier = Modifier, onNavigate: () -> Unit) {
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "MAKE YOUR",
-                    fontSize = 26.sp,
+                    text = "APPLE STORE",
+                    fontSize = 34.sp,
                     fontFamily = GelasioMedium,
                     fontWeight = FontWeight.Medium,
-                    color = colorResource(id = R.color.title1)
+                    color = Color.White
                 )
             }
             Column(
                 modifier = Modifier
+                    .padding(bottom = 100.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "HOME BEAUTIFUL",
-                    fontSize = 34.sp,
+                    text = "WORLD OF TECHNOLOGY",
+                    fontSize = 26.sp,
                     fontFamily = GelasioMedium,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(bottom = 26.dp, top = 10.dp),
-                    color = colorResource(id = R.color.title2)
+                    color = Color.White
                 )
             }
+            Box(modifier = Modifier.size(width = 200.dp, height = 180.dp)) {
+
+            }
             Text(
-                text = "The best simple place where you " +
-                        "discover most wonderful furnitures " +
-                        "and make your home beautiful",
+                text = "The best way to buy the products you like ",
                 fontSize = 17.sp,
                 fontFamily = NunitoSans,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(start = 40.dp, end = 20.dp),
-                color = colorResource(id = R.color.desOB)
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 40.dp, end = 40.dp),
+                color = Color.White
             )
 //            val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 //            val bottomPadding = screenHeight * 0.25f // 25% chiều cao màn hình
 
-            Box(modifier = Modifier.size(width = 200.dp, height = 210.dp)) {
-
-            }
             Button(
                 onClick = onNavigate,
-                modifier = Modifier.size(width = 160.dp, height = 50.dp),
+                modifier = Modifier.padding(top = 30.dp)
+                    .size(width = 160.dp, height = 50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.backgroundButtonOb)),
                 shape = MaterialTheme.shapes.small
             )
@@ -136,5 +138,13 @@ fun onBoarding(modifier: Modifier = Modifier, onNavigate: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun OnBoardingPreview() {
+    Assignment_PH33001Theme {
+        onBoarding(onNavigate = {})
     }
 }

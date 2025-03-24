@@ -15,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
@@ -50,161 +52,170 @@ fun LoginContent(Navigate1: () -> Unit, Navigate2: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-        Column(
+
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+
+    Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White) // ✅ Đặt màu nền
-                .systemBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .systemBarsPadding()
+                , horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Ảnh Logo
-            Row(
-                modifier = Modifier.padding(top = 60.dp, bottom = 30.dp).fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.rectangle), // Thay bằng ảnh của bạn
-                    contentDescription = "Logo",
-                    modifier = Modifier
-                        .size(70.dp)
-                        .padding(bottom = 16.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.ggroup), // Thay bằng ảnh của bạn
-                    contentDescription = "Logo",
-                    modifier = Modifier
-                        .size(70.dp)
-                        .padding(bottom = 16.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.rectangle), // Thay bằng ảnh của bạn
-                    contentDescription = "Logo",
-                    modifier = Modifier
-                        .size(70.dp)
-                        .padding(bottom = 16.dp)
-                )
-            }
-
             Column(
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.Start
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.height(screenHeight * 0.25f)
             ) {
-                Text(
-                    text = "Hello!",
-                    fontSize = 30.sp,
-                    fontFamily = GelasioMedium,
-                    fontWeight = FontWeight.Medium,
-                    color = colorResource(id = R.color.title1)
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = "WELCOME BACK",
-                    fontSize = 30.sp,
-                    fontFamily = GelasioMedium,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom =50.dp, top = 10.dp),
-                    color = colorResource(id = R.color.title2)
-                )
-            }
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 30.dp, top = 10.dp)
-                    .shadow(5.dp, shape = MaterialTheme.shapes.medium),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(start = 16.dp, top = 25.dp, end = 5.dp)
+                Row(
+                    modifier = Modifier,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text("Email") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        modifier = Modifier.fillMaxWidth()
+                    Image(
+                        painter = painterResource(id = R.drawable.rectangle), // Thay bằng ảnh của bạn
+                        contentDescription = "Logo",
+                        modifier = Modifier
+                            .size(70.dp)
+                            .padding(bottom = 16.dp)
                     )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = { Text("Password") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        modifier = Modifier.fillMaxWidth(),
-                        trailingIcon = {
-                            val image = if (passwordVisible)
-                                painterResource(id = R.drawable.baseline_visibility_24)
-                            else
-                                painterResource(id = R.drawable.baseline_visibility_off_24)
-
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                                Image(
-                                    painter = image,
-                                    contentDescription = "Toggle password visibility"
-                                )
-                            }
-                        }
+                    Image(
+                        painter = painterResource(id = R.drawable.logologinsignup), // Thay bằng ảnh của bạn
+                        contentDescription = "Logo",
+                        modifier = Modifier
+                            .size(70.dp)
+                            .padding(bottom = 16.dp)
                     )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
+                    Image(
+                        painter = painterResource(id = R.drawable.rectangle), // Thay bằng ảnh của bạn
+                        contentDescription = "Logo",
+                        modifier = Modifier
+                            .size(70.dp)
+                            .padding(bottom = 16.dp)
+                    )
                 }
 
                 Column(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(top = 25.dp, bottom = 40.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                    modifier = Modifier.width(screenWidth * 0.8f),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Bottom
+                ) {
                     Text(
-                        modifier = Modifier.padding(bottom = 35.dp),
-                        text = "Forgot Password",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium
-
+                        text = "Hello!",
+                        fontSize = 30.sp,
+                        fontFamily = GelasioMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = colorResource(id = R.color.title1)
                     )
 
-                    Button(
-                        onClick = { Navigate2() },
-                        modifier = Modifier
-                            .padding(start = 30.dp, end = 30.dp)
-                            .height(45.dp)
-                            .shadow(8.dp, shape = MaterialTheme.shapes.medium)
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.backgroundButtonOb)),
-                        shape = MaterialTheme.shapes.small
+                    Text(
+                        text = "WELCOME BACK",
+                        fontSize = 30.sp,
+                        fontFamily = GelasioMedium,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(bottom =50.dp, top = 10.dp),
+                        color = colorResource(id = R.color.title2)
                     )
-                    {
-                        Text(
-                            text = "LOGIN",
-                            fontSize = 17.sp,
-                            fontFamily = GelasioMedium,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White
+                }
+            }
+
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.height(screenHeight * 0.6f)
+                    .padding(top = screenHeight * 0.05f)
+                    .background(Color.Blue)
+                    .fillMaxWidth()
+
+            ) {
+                Card(
+                    modifier = Modifier.width(screenWidth * 0.95f)
+                        .shadow(5.dp, shape = MaterialTheme.shapes.medium),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(start = 16.dp, top = 25.dp, end = 5.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = email,
+                            onValueChange = { email = it },
+                            label = { Text("Email") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                            modifier = Modifier.fillMaxWidth()
                         )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        OutlinedTextField(
+                            value = password,
+                            onValueChange = { password = it },
+                            label = { Text("Password") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth(),
+                            trailingIcon = {
+                                val image = if (passwordVisible)
+                                    painterResource(id = R.drawable.baseline_visibility_24)
+                                else
+                                    painterResource(id = R.drawable.baseline_visibility_off_24)
+
+                                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                    Image(
+                                        painter = image,
+                                        contentDescription = "Toggle password visibility"
+                                    )
+                                }
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
                     }
 
-                    Text(
-                        modifier = Modifier.padding(top = 30.dp)
-                            .clickable {
-                                Navigate1()
-                            },
-                        text = "SIGN UP",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(top = 25.dp, bottom = 40.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        Text(
+                            modifier = Modifier.padding(bottom = 35.dp),
+                            text = "Forgot Password",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Medium
 
-                    )
+                        )
+
+                        Button(
+                            onClick = { Navigate2() },
+                            modifier = Modifier
+                                .padding(start = 30.dp, end = 30.dp)
+                                .height(45.dp)
+                                .shadow(8.dp, shape = MaterialTheme.shapes.medium)
+                                .fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.backgroundButtonOb)),
+                            shape = MaterialTheme.shapes.small
+                        )
+                        {
+                            Text(
+                                text = "LOGIN",
+                                fontSize = 17.sp,
+                                fontFamily = GelasioMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.White
+                            )
+                        }
+
+                        Text(
+                            modifier = Modifier.padding(top = 30.dp)
+                                .clickable {
+                                    Navigate1()
+                                },
+                            text = "SIGN UP",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+
+                            )
+                    }
                 }
             }
 
@@ -212,5 +223,11 @@ fun LoginContent(Navigate1: () -> Unit, Navigate2: () -> Unit) {
 
     }
 
-
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun LoginPreview() {
+    Assignment_PH33001Theme {
+        LoginContent(Navigate1 = {}, Navigate2 = {})
+    }
+}
 

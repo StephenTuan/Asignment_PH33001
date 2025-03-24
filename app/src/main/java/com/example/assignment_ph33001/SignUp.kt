@@ -74,7 +74,7 @@ fun SignUpContent(Navigate1: () -> Unit) {
                     .padding(bottom = 16.dp)
             )
             Image(
-                painter = painterResource(id = R.drawable.ggroup), // Thay bằng ảnh của bạn
+                painter = painterResource(id = R.drawable.logologinsignup), // Thay bằng ảnh của bạn
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(70.dp)
