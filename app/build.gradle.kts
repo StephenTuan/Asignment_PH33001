@@ -53,6 +53,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.4")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
