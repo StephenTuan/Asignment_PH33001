@@ -147,7 +147,7 @@ fun NavigationGraph(navController: NavHostController, context: Context) {
                 backStackEntry.arguments?.getString("productImage") ?: "", "UTF-8"
             )
             val productPrice = backStackEntry.arguments?.getString("productPrice")?.toFloatOrNull() ?: 0f
-            DetailProduct(
+            com.example.assignment_ph33001.ScreenBottom.DetailProducts(
                 productId = productId.toString(),
                 productName = productName,
                 productImage = productImage,
