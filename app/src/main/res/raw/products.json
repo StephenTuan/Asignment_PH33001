@@ -74,13 +74,13 @@
           "id": 11,
           "name": "iPad Pro M2",
           "price": 1099,
-          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone16pro-digitalmat-gallery-3-202409?wid=728&hei=666&fmt=jpeg&qlt=90&.v=1723843057832"
+          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/ipadpro11-digitalmat-gallery-1-202404?wid=728&hei=666&fmt=png-alpha&.v=1713308651643"
         },
         {
           "id": 12,
           "name": "iPad Pro M1",
           "price": 1099,
-          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone16pro-digitalmat-gallery-3-202409?wid=728&hei=666&fmt=jpeg&qlt=90&.v=1723843057832"
+          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/ipadpro11-digitalmat-gallery-1-202404?wid=728&hei=666&fmt=png-alpha&.v=1713308651643"
         }
       ]
     },
@@ -92,7 +92,7 @@
           "id": 13,
           "name": "Mac Studio M2 Ultra",
           "price": 3999,
-          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone16pro-digitalmat-gallery-3-202409?wid=728&hei=666&fmt=jpeg&qlt=90&.v=1723843057832"
+          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mac-studio-digitalmat-gallery-4-202503?wid=728&hei=666&fmt=png-alpha&.v=1739489146544"
         }
       ]
     },
@@ -104,7 +104,7 @@
           "id": 14,
           "name": "Mac Mini M2",
           "price": 799,
-          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone16pro-digitalmat-gallery-3-202409?wid=728&hei=666&fmt=jpeg&qlt=90&.v=1723843057832"
+          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mac-mini-digitalmat-gallery-3-202410?wid=728&hei=666&fmt=png-alpha&.v=1728341423793"
         }
       ]
     },
@@ -114,9 +114,9 @@
       "products": [
         {
           "id": 15,
-          "name": "AirPods Pro 2",
+          "name": "AirPods Pro 3",
           "price": 249,
-          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone16pro-digitalmat-gallery-3-202409?wid=728&hei=666&fmt=jpeg&qlt=90&.v=1723843057832"
+          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/airpods-pro-2-hero-select-202409_FMT_WHH?wid=750&hei=556&fmt=jpeg&qlt=90&.v=1724041668836"
         }
       ]
     },
@@ -128,7 +128,7 @@
           "id": 16,
           "name": "Studio Display",
           "price": 1599,
-          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone16pro-digitalmat-gallery-3-202409?wid=728&hei=666&fmt=jpeg&qlt=90&.v=1723843057832"
+          "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/studio-display-og-202203?wid=600&hei=315&fmt=jpeg&qlt=95&.v=1645125507093"
         }
       ]
     }

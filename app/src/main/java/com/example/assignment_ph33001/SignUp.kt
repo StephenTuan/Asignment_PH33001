@@ -1,7 +1,9 @@
 package com.example.assignment_ph33001
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -25,8 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import com.example.assignment_ph33001.model.User
 import com.example.assignment_ph33001.ui.theme.Assignment_PH33001Theme
 import com.example.assignment_ph33001.ui.theme.GelasioMedium
+import com.google.gson.Gson
+import java.io.File
 
 class SignUp : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +41,7 @@ class SignUp : ComponentActivity() {
             Assignment_PH33001Theme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     SignUpContent(
+                        context = this,
                         Navigate1 = { startActivity(Intent(this, LoginScreen::class.java)) }
                     )
                 }
@@ -45,7 +51,7 @@ class SignUp : ComponentActivity() {
 }
 
 @Composable
-fun SignUpContent(Navigate1: () -> Unit) {
+fun SignUpContent(context: Context, Navigate1: () -> Unit) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -55,11 +61,10 @@ fun SignUpContent(Navigate1: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) // ✅ Đặt màu nền
+            .background(Color.White)
             .systemBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // Ảnh Logo
         Row(
             modifier = Modifier
                 .padding(top = 60.dp, bottom = 30.dp)
@@ -67,21 +72,25 @@ fun SignUpContent(Navigate1: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.rectangle), // Thay bằng ảnh của bạn
+                painter = painterResource(id = R.drawable.rectangle),
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(70.dp)
                     .padding(bottom = 16.dp)
             )
             Image(
-                painter = painterResource(id = R.drawable.logologinsignup), // Thay bằng ảnh của bạn
+                painter = painterResource(id = R.drawable.logologinsignup),
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(70.dp)
                     .padding(bottom = 16.dp)
+                    .clickable {
+                            context.deleteFile("userData.json")
+                            Toast.makeText(context, "Đã xóa file userData.json", Toast.LENGTH_SHORT).show()
+                    }
             )
             Image(
-                painter = painterResource(id = R.drawable.rectangle), // Thay bằng ảnh của bạn
+                painter = painterResource(id = R.drawable.rectangle),
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(70.dp)
@@ -187,7 +196,21 @@ fun SignUpContent(Navigate1: () -> Unit) {
             }
 
             Button(
-                onClick = { Navigate1() },
+                onClick = {
+                    if (name.isEmpty() || email.isEmpty() || password.isEmpty() || passwordCf.isEmpty()) {
+                        Toast.makeText(context, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show()
+                    } else if (!isValidEmail(email)) {
+                        Toast.makeText(context, "Email không đúng định dạng", Toast.LENGTH_SHORT).show()
+                    } else if (password != passwordCf) {
+                        Toast.makeText(context, "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val isSuccess = saveUserDataToJsonFile(context, User(name, email, password))
+                        if (isSuccess) {
+                            Toast.makeText(context, "Đăng ký thành công", Toast.LENGTH_SHORT).show()
+                            Navigate1()
+                        }
+                    }
+                },
                 modifier = Modifier
                     .padding(start = 30.dp, end = 30.dp, top = 20.dp)
                     .height(45.dp)
@@ -205,7 +228,6 @@ fun SignUpContent(Navigate1: () -> Unit) {
                 )
             }
 
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -222,7 +244,7 @@ fun SignUpContent(Navigate1: () -> Unit) {
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = "SIGN IN",
+                    text = "LOGIN",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
                     color = colorResource(id = R.color.backgroundButtonOb),
@@ -234,6 +256,34 @@ fun SignUpContent(Navigate1: () -> Unit) {
     }
 
 }
+
+fun isValidEmail(email: String): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
+
+fun saveUserDataToJsonFile(context: Context, newUser: User): Boolean {
+    val gson = Gson()
+    val file = File(context.filesDir, "userData.json")
+    val userList: MutableList<User> = if (file.exists()) {
+        val existingJson = file.readText()
+        if (existingJson.startsWith("[")) { // Check đúng là 1 mảng
+            gson.fromJson(existingJson, Array<User>::class.java).toMutableList()
+        } else mutableListOf()
+    } else mutableListOf()
+    // Check email trùng
+    if (userList.any { it.email == newUser.email }) {
+        Toast.makeText(context, "Email đã tồn tại", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    // Thêm user mới
+    userList.add(newUser)
+    // Ghi lại toàn bộ danh sách user
+    val jsonString = gson.toJson(userList)
+    file.writeText(jsonString)
+    return true
+}
+
+
 
 
 

@@ -2,6 +2,7 @@ package com.example.assignment_ph33001
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,8 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.example.assignment_ph33001.ScreenBottom.HomeScreen
+import com.example.assignment_ph33001.model.User
 import com.example.assignment_ph33001.ui.theme.Assignment_PH33001Theme
 import com.example.assignment_ph33001.ui.theme.GelasioMedium
+import com.google.gson.Gson
+import java.io.File
 
 class LoginScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,24 +54,25 @@ class LoginScreen : ComponentActivity() {
 
 @Composable
 fun LoginContent(Navigate1: () -> Unit, Navigate2: () -> Unit) {
+    val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White) // ✅ Đặt màu nền
+                .background(Color.White)
                 .systemBarsPadding()
                 , horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Ảnh Logo
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.height(screenHeight * 0.25f)
+                modifier = Modifier.height(screenHeight * 0.295f)
+                    .width(screenWidth * 0.8f)
+                    .padding(top = screenHeight * 0.01f)
             ) {
                 Row(
                     modifier = Modifier,
@@ -96,8 +102,7 @@ fun LoginContent(Navigate1: () -> Unit, Navigate2: () -> Unit) {
                 }
 
                 Column(
-                    modifier = Modifier.width(screenWidth * 0.8f),
-                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom
                 ) {
                     Text(
@@ -107,116 +112,165 @@ fun LoginContent(Navigate1: () -> Unit, Navigate2: () -> Unit) {
                         fontWeight = FontWeight.Medium,
                         color = colorResource(id = R.color.title1)
                     )
-
                     Text(
                         text = "WELCOME BACK",
                         fontSize = 30.sp,
                         fontFamily = GelasioMedium,
                         fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(bottom =50.dp, top = 10.dp),
+                        modifier = Modifier.padding(bottom = screenHeight * 0.01f),
                         color = colorResource(id = R.color.title2)
                     )
                 }
             }
 
+        val heightcolum = screenHeight * 0.7f
             Column(
+
                 horizontalAlignment = Alignment.Start,
-                modifier = Modifier.height(screenHeight * 0.6f)
-                    .padding(top = screenHeight * 0.05f)
-                    .background(Color.Blue)
-                    .fillMaxWidth()
+                modifier = Modifier.height(heightcolum)
+                    .padding(top = screenHeight * 0.005f)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center
 
             ) {
+                val heightCard = heightcolum * 0.8f
                 Card(
-                    modifier = Modifier.width(screenWidth * 0.95f)
+                    modifier = Modifier
+                        .width(screenWidth * 0.95f)
+                        .height(heightCard)
                         .shadow(5.dp, shape = MaterialTheme.shapes.medium),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(start = 16.dp, top = 25.dp, end = 5.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
                     ) {
-                        OutlinedTextField(
-                            value = email,
-                            onValueChange = { email = it },
-                            label = { Text("Email") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        OutlinedTextField(
-                            value = password,
-                            onValueChange = { password = it },
-                            label = { Text("Password") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            modifier = Modifier.fillMaxWidth(),
-                            trailingIcon = {
-                                val image = if (passwordVisible)
-                                    painterResource(id = R.drawable.baseline_visibility_24)
-                                else
-                                    painterResource(id = R.drawable.baseline_visibility_off_24)
-
-                                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                                    Image(
-                                        painter = image,
-                                        contentDescription = "Toggle password visibility"
-                                    )
-                                }
-                            }
-                        )
-
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                    }
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(top = 25.dp, bottom = 40.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ){
-                        Text(
-                            modifier = Modifier.padding(bottom = 35.dp),
-                            text = "Forgot Password",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Medium
-
-                        )
-
-                        Button(
-                            onClick = { Navigate2() },
+                        Column(
                             modifier = Modifier
-                                .padding(start = 30.dp, end = 30.dp)
-                                .height(45.dp)
-                                .shadow(8.dp, shape = MaterialTheme.shapes.medium)
-                                .fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.backgroundButtonOb)),
-                            shape = MaterialTheme.shapes.small
-                        )
-                        {
-                            Text(
-                                text = "LOGIN",
-                                fontSize = 17.sp,
-                                fontFamily = GelasioMedium,
-                                fontWeight = FontWeight.Medium,
-                                color = Color.White
+                                .fillMaxWidth()
+                                .weight(0.5f)
+                                .padding(16.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = email,
+                                onValueChange = { email = it },
+                                label = { Text("Email") },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                                modifier = Modifier.fillMaxWidth()
                             )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            OutlinedTextField(
+                                value = password,
+                                onValueChange = { password = it },
+                                label = { Text("Password") },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(), // ✅ Hiện dấu chấm khi `passwordVisible = false`
+                                modifier = Modifier.fillMaxWidth(),
+                                trailingIcon = {
+                                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                        Icon(
+                                            painter = painterResource(
+                                                id = if (passwordVisible) R.drawable.baseline_visibility_off_24
+                                                else R.drawable.baseline_visibility_24
+                                            ),
+                                            contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                                            tint = Color.Gray
+                                        )
+                                    }
+                                }
+                            )
+
                         }
 
-                        Text(
-                            modifier = Modifier.padding(top = 30.dp)
-                                .clickable {
-                                    Navigate1()
-                                },
-                            text = "SIGN UP",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
+                        Spacer(modifier = Modifier.height(heightCard*0.05f))
 
+                        val heightColum2 = heightCard * 0.55f
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(heightColum2),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(
+                                        bottom = heightColum2 * 0.15f,
+                                        top = heightColum2 * 0.15f),
+                                text = "Forgot Password",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Medium
                             )
+                            Button(
+                                onClick = {
+                                    when {
+                                        email.isBlank() && password.isBlank() -> {
+                                            Toast.makeText(context, "Không được để trống email và password", Toast.LENGTH_LONG).show()
+                                        }
+                                        else -> {
+                                            try {
+                                                val file = File(context.filesDir, "userData.json")
+                                                if (file.exists()) {
+                                                    val gson = Gson()
+                                                    val jsonString = file.readText()
+                                                    val userList: List<User> = gson.fromJson(jsonString, Array<User>::class.java).toList()
+
+                                                    val user = userList.find { it.email == email }
+
+                                                    if (user != null) {
+                                                        if (user.password == password) {
+                                                            Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
+                                                            Navigate2()
+                                                        } else {
+                                                            Toast.makeText(context, "Sai password", Toast.LENGTH_LONG).show()
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(context, "Email chưa được đăng ký", Toast.LENGTH_LONG).show()
+                                                    }
+                                                } else {
+                                                    Toast.makeText(context, "Chưa có dữ liệu người dùng", Toast.LENGTH_LONG).show()
+                                                }
+                                            } catch (e: Exception) {
+                                                e.printStackTrace()
+                                                Toast.makeText(context, "Lỗi đọc dữ liệu", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
+                                },
+                                modifier = Modifier
+                                    .padding(
+                                        start = 30.dp,
+                                        end = 30.dp,
+                                        bottom = heightColum2 * 0.15f
+                                    )
+                                    .height(heightColum2 * 0.25f)
+                                    .shadow(8.dp, shape = MaterialTheme.shapes.medium)
+                                    .fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.backgroundButtonOb)),
+                                shape = MaterialTheme.shapes.small
+                            ) {
+                                Text(
+                                    text = "LOGIN",
+                                    fontSize = 17.sp,
+                                    fontFamily = GelasioMedium,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.White
+                                )
+                            }
+                            Text(
+                                modifier = Modifier
+                                    .clickable { Navigate1() },
+                                text = "SIGN UP",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
                     }
                 }
+
             }
 
         }

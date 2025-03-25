@@ -33,14 +33,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.example.assignment_ph33001.R
 import com.example.assignment_ph33001.model.Category
+import com.example.assignment_ph33001.model.Product
 import com.example.assignment_ph33001.repository.ProductRepository
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -124,12 +127,36 @@ fun currentRoute(navController: NavHostController): String? {
 @Composable
 fun NavigationGraph(navController: NavHostController, context: Context) {
     NavHost(navController, startDestination = "home") {
-        composable("home") { HomeScreenContent(context) }
+        composable("home") { HomeScreenContent(context, navController) }
         composable("search") { SearchScreenContent() }
         composable("profile") { ProfileScreenContent() }
         composable("settings") { SettingsScreenContent() }
+
+        composable(
+            "product_detail/{productId}/{productName}/{productImage}/{productPrice}",
+            arguments = listOf(
+                navArgument("productId") { type = NavType.StringType },
+                navArgument("productName") { type = NavType.StringType },
+                navArgument("productImage") { type = NavType.StringType },
+                navArgument("productPrice") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull() ?: 0
+            val productName = backStackEntry.arguments?.getString("productName") ?: ""
+            val productImage = java.net.URLDecoder.decode(
+                backStackEntry.arguments?.getString("productImage") ?: "", "UTF-8"
+            )
+            val productPrice = backStackEntry.arguments?.getString("productPrice")?.toFloatOrNull() ?: 0f
+            DetailProduct(
+                productId = productId.toString(),
+                productName = productName,
+                productImage = productImage,
+                productPrice = productPrice.toString(),
+            )
+        }
     }
 }
+
 
 @Composable
 fun CenteredText(text: String) {

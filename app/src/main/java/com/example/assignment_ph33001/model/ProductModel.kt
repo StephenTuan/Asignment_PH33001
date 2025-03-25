@@ -10,5 +10,5 @@ data class Product(
     val id: Int,
     val name: String,
     val price: Double,
-    val image: String // Đường dẫn ảnh
+    val image: String
 )

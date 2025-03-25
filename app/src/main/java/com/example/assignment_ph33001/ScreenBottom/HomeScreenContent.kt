@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.assignment_ph33001.R
 import com.example.assignment_ph33001.model.Category
@@ -54,7 +55,7 @@ import com.example.assignment_ph33001.ui.theme.GelasioMedium
 import com.example.assignment_ph33001.ui.theme.NunitoSans
 
 @Composable
-fun HomeScreenContent(context: Context) {
+fun HomeScreenContent(context: Context,navController: NavHostController) {
     val categories = remember { mutableStateOf(emptyList<Category>()) }
     val selectedCategory = remember { mutableStateOf<Category?>(null) }
 
@@ -115,7 +116,7 @@ fun HomeScreenContent(context: Context) {
             } else {
                 CategoryList(categories.value, selectedCategory)
                 Spacer(modifier = Modifier.height(10.dp))
-                ProductList(selectedCategory.value?.products ?: emptyList())
+                ProductList(selectedCategory.value?.products ?: emptyList(), navController)
             }
         }
     }
@@ -174,25 +175,31 @@ fun getCategoryIconResId(iconName: String): Int {
 
 
 @Composable
-fun ProductList(products: List<com.example.assignment_ph33001.model.Product>) {
+fun ProductList(products: List<com.example.assignment_ph33001.model.Product>, navController: NavHostController) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // Hiển thị 2 sản phẩm trên 1 hàng
+        columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(products) { product ->
-            ProductItem(product)
+            ProductItem(product, navController)
         }
     }
 }
+
 @Composable
-fun ProductItem(product: com.example.assignment_ph33001.model.Product) {
+fun ProductItem(product: com.example.assignment_ph33001.model.Product,
+                navController: NavHostController,) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable {
+                val encodedImage = java.net.URLEncoder.encode(product.image, "UTF-8")
+                navController.navigate("product_detail/${product.id}/${product.name}/${encodedImage}/${product.price}")
+            },
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
