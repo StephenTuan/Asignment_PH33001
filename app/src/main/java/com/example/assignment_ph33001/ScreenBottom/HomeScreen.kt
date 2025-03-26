@@ -5,30 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,12 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.example.assignment_ph33001.R
-import com.example.assignment_ph33001.model.Category
-import com.example.assignment_ph33001.model.Product
-import com.example.assignment_ph33001.repository.ProductRepository
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
@@ -81,9 +60,10 @@ fun AppContent(context: Context) {
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         BottomNavItem("home", "Home", R.drawable.home),
-        BottomNavItem("search", "Search", R.drawable.bookmark),
-        BottomNavItem("profile", "Profile", R.drawable.notification),
-        BottomNavItem("settings", "Settings", R.drawable.profile)
+        BottomNavItem("favorite", "Favorite", R.drawable.bookmark),
+        BottomNavItem("settings", "Settings", R.drawable.profile),
+        BottomNavItem("profile", "Profile", R.drawable.notification)
+
     )
 
     NavigationBar(containerColor = Color.White) {
@@ -128,17 +108,20 @@ fun currentRoute(navController: NavHostController): String? {
 fun NavigationGraph(navController: NavHostController, context: Context) {
     NavHost(navController, startDestination = "home") {
         composable("home") { HomeScreenContent(context, navController) }
-        composable("search") { SearchScreenContent() }
-        composable("profile") { ProfileScreenContent() }
+        composable("favorite") { FavoriteScreenContent() }
         composable("settings") { SettingsScreenContent() }
+        composable("profile") { ProfileScreenContent() }
 
         composable(
-            "product_detail/{productId}/{productName}/{productImage}/{productPrice}",
+            "product_detail/{productId}/{productName}/{productImage}/{productPrice}/{productRate}/{productDescription}/{productReview}",
             arguments = listOf(
                 navArgument("productId") { type = NavType.StringType },
                 navArgument("productName") { type = NavType.StringType },
                 navArgument("productImage") { type = NavType.StringType },
-                navArgument("productPrice") { type = NavType.StringType }
+                navArgument("productPrice") { type = NavType.StringType },
+//                navArgument("productRate") { type = NavType.StringType },
+//                navArgument("productDescription") { type = NavType.StringType },
+//                navArgument("productReview") { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull() ?: 0
@@ -147,12 +130,10 @@ fun NavigationGraph(navController: NavHostController, context: Context) {
                 backStackEntry.arguments?.getString("productImage") ?: "", "UTF-8"
             )
             val productPrice = backStackEntry.arguments?.getString("productPrice")?.toFloatOrNull() ?: 0f
-            com.example.assignment_ph33001.ScreenBottom.DetailProducts(
-                productId = productId.toString(),
-                productName = productName,
-                productImage = productImage,
-                productPrice = productPrice.toString(),
-            )
+//            val productRate = backStackEntry.arguments?.getString("productRate") ?: ""
+//            val productDescription = backStackEntry.arguments?.getString("productDescription") ?: ""
+//            val productReview = backStackEntry.arguments?.getString("productReview") ?: ""
+
         }
     }
 }
