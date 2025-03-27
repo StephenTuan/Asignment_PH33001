@@ -1,17 +1,21 @@
 package com.example.assignment_ph33001.model
 
+import androidx.annotation.Keep
+
+@Keep
 data class Category(
-    val name: String,
-    val products: List<Product>,
-    val icon: String
+    val id: String = "",
+    val name: String = "",
+    val icon: String = "",
+    val products: List<Product> = emptyList()
+)
+data class Product(
+    val id: Int = 0,
+    val name: String = "",
+    val image: String = "",
+    val price: Double = 0.0,
+    val rate: Double = 0.0,
+    val description: String = "",
+    val review: String = ""
 )
 
-data class Product(
-    val id: Int,
-    val name: String,
-    val price: Double,
-    val image: String,
-    val description: String,
-    val rate: String,
-    val review: String
-)

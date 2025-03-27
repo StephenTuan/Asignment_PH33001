@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1055301895008",
+    "project_id": "assignment-ph33001",
+    "storage_bucket": "assignment-ph33001.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055301895008:android:5384eeaa3039d585fe5405",
+        "android_client_info": {
+          "package_name": "com.example.assignment_ph33001"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAm4kf0WzbnrTd8J1wouPVWCbTFiJurm7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -50,9 +50,8 @@ fun AppContent(context: Context) {
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavigationGraph(navController, context)
+            NavigationGraph(navController)
         }
-
     }
 }
 
@@ -61,8 +60,8 @@ fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         BottomNavItem("home", "Home", R.drawable.home),
         BottomNavItem("favorite", "Favorite", R.drawable.bookmark),
-        BottomNavItem("settings", "Settings", R.drawable.profile),
-        BottomNavItem("profile", "Profile", R.drawable.notification)
+        BottomNavItem("notification", "Notification", R.drawable.notification),
+        BottomNavItem("profile", "Profile", R.drawable.profile)
 
     )
 
@@ -105,11 +104,11 @@ fun currentRoute(navController: NavHostController): String? {
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController, context: Context) {
+fun NavigationGraph(navController: NavHostController) {
     NavHost(navController, startDestination = "home") {
-        composable("home") { HomeScreenContent(context, navController) }
+        composable("home") { HomeScreenContent(navController) }
         composable("favorite") { FavoriteScreenContent() }
-        composable("settings") { SettingsScreenContent() }
+        composable("notification") { NotificationScreenContent() }
         composable("profile") { ProfileScreenContent() }
 
         composable(

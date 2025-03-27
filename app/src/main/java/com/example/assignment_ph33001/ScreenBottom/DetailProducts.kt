@@ -7,8 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -27,9 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.example.assignment_ph33001.R
 import com.example.assignment_ph33001.ui.theme.Assignment_PH33001Theme
+import com.example.assignment_ph33001.ui.theme.GelasioMedium
 import com.example.assignment_ph33001.ui.theme.NunitoSans
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -53,7 +56,7 @@ class DetailProducts : ComponentActivity() {
                         productName = productName,
                         productImage = productImage,
                         productPrice = productPrice.toString(),
-                        productRate = productRate,
+                        productRate = productRate.toString(),
                         productDescription = productDescription,
                         productReview = productReview,
                         navController = null
@@ -82,6 +85,7 @@ fun DetailContent(
 
     val systemUiController = rememberSystemUiController()
     val statusBarColor = Color.White
+    val scrollState = rememberScrollState()
 
     SideEffect {
         systemUiController.setStatusBarColor(color = statusBarColor)
@@ -128,38 +132,59 @@ fun DetailContent(
                     .fillMaxHeight()
 //                    .background(Color.Gray)
                     .shadow(5.dp, shape = MaterialTheme.shapes.medium)
-                    .clip(RoundedCornerShape(bottomStart = 35.dp))
+                    .clip(RoundedCornerShape(bottomStart = 30.dp))
             ) {
-                productImage?.let {
-                    Image(
-                        painter = rememberAsyncImagePainter(it),
-                        contentDescription = "Product Image",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(bottomStart = 35.dp))
-                    )
-                }
+                AsyncImage(
+                    model = productImage,
+                    contentDescription = productName,
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .fillMaxHeight(1f)
+                        .clip(RoundedCornerShape(bottomStart = 30.dp)),
+
+                    contentScale = ContentScale.Crop,
+                    alignment = Alignment.Center,
+                    onLoading = { /* Optional loading state */ },
+                    onError = { /* Optional error state */ }
+                )
+//                productImage?.let {
+//                    Image(
+//                        painter = rememberAsyncImagePainter(it),
+//                        contentDescription = "Product Image",
+//                        contentScale = ContentScale.Crop,
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .clip(RoundedCornerShape(bottomStart = 35.dp))
+//                    )
+//                }
             }
         }
-
         //TTSP
 
+        val heightTTSP = screenHeight * 0.4f
         Column(
             modifier = Modifier.fillMaxWidth()
-                .height(screenHeight * 0.4f)
-                .background(Color.Blue)
+                .padding(start = 10.dp, end = 10.dp)
+                .height(heightTTSP)
+
         )
         {
-            Text(
-                text = productName,
-                color = Color.Black,
-                fontSize = 24.sp,
-                fontFamily = NunitoSans,
-                fontWeight = FontWeight.Bold,
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .height(heightTTSP*0.15f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = productName,
+                    color = Color.Black,
+                    fontSize = 24.sp,
+                    fontFamily = NunitoSans,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .height(heightTTSP*0.15f),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -170,7 +195,9 @@ fun DetailContent(
                     fontWeight = FontWeight.Bold
                 )
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.width(screenWidth*0.28f)
                 ) {
                     Button(
                         onClick = { if (quantity > 1) quantity-- },
@@ -197,41 +224,102 @@ fun DetailContent(
                     }
                 }
             }
-            Row(
+            Column(
                 modifier = Modifier
-                    .width(screenWidth*0.55f),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .height(heightTTSP*0.15f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(
+                    modifier = Modifier
+                        .width(screenWidth*0.55f),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "⭐ $productRate",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "( $productReview )",
+                        fontSize = 16.sp,
+                        fontFamily = NunitoSans,
+                        fontWeight = FontWeight.Bold,
+                        color = colorResource(id = R.color.desOB)
+                    )
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(heightTTSP*0.55f)
+                    .verticalScroll(scrollState),
+                verticalArrangement = Arrangement.Top
             ) {
                 Text(
-                    text = "⭐ $productRate",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold)
-                Text(
-                    text = "( $productReview )",
+                    text = productDescription,
                     fontSize = 16.sp,
                     fontFamily = NunitoSans,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier,
                     color = colorResource(id = R.color.desOB)
                 )
             }
-            Text(
-                text = productDescription,
-                fontSize = 16.sp,
-                fontFamily = NunitoSans,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier,
-                color = colorResource(id = R.color.desOB)
-            )
         }
+
+        //footer
+        val heightFooter = screenHeight * 0.1f
+
         Column(
-            modifier = Modifier.fillMaxWidth()
-                .fillMaxHeight()
-                .height(screenHeight * 0.1f)
-                .background(Color.Red)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(heightFooter),
+//                .background(Color.Red),
+            verticalArrangement = Arrangement.Center
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Bookmark Button
+                Box(
+                    modifier = Modifier
+                        .size(heightFooter * 0.8f)
+                        .shadow(5.dp, shape = RoundedCornerShape(5.dp))
+                        .background(color = colorResource(R.color.btnbm), shape = RoundedCornerShape(8.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.bookmark),
+                            contentDescription = "Bookmark Icon",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
 
-
-
+                // Add to Cart Button
+                Button(
+                    modifier = Modifier
+                        .shadow(5.dp, shape = MaterialTheme.shapes.medium)
+                        .width(screenWidth * 0.7f)
+                        .height(heightFooter * 0.8f), // Đảm bảo cùng chiều cao với Bookmark
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.backgroundButtonOb)),
+                    shape = MaterialTheme.shapes.small,
+                    onClick = {}
+                ) {
+                    Text(
+                        text = "Add to cart",
+                        fontSize = 20.sp,
+                        fontFamily = GelasioMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }

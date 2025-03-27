@@ -1,24 +1,37 @@
 package com.example.assignment_ph33001.repository
 
-import android.content.Context
-import com.example.assignment_ph33001.R
+import android.util.Log
 import com.example.assignment_ph33001.model.Category
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
-class ProductRepository {
-    companion object {
-        fun loadCategories(context: Context): List<Category> {
-            return try {
-                val inputStream = context.resources.openRawResource(R.raw.products)
-                val jsonString = inputStream.bufferedReader().use { it.readText() }
-                val listType = object : TypeToken<Map<String, List<Category>>>() {}.type
-                val data: Map<String, List<Category>> = Gson().fromJson(jsonString, listType)
-                data["categories"] ?: emptyList()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emptyList()
+object ProductRepository {
+    private val database = FirebaseDatabase.
+    getInstance("https://assignment-ph33001-default-rtdb.asia-southeast1.firebasedatabase.app")
+
+    fun loadCategories(callback: (List<Category>) -> Unit) {
+        val databaseRef = database.reference.child("categories")
+
+        databaseRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val categories = mutableListOf<Category>()
+                snapshot.children.forEach { childSnapshot ->
+                    val category = childSnapshot.getValue(Category::class.java)
+                    Log.d("Firebase", "Category data: $category")
+                    category?.let {
+                        categories.add(it)
+                    }
+                }
+                Log.d("Firebase", "Total categories loaded: ${categories.size}")
+                callback(categories)
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase", "Error loading categories: ${error.message}")
+                callback(emptyList())
+            }
+        })
     }
 }

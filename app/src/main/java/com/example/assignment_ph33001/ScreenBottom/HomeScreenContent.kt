@@ -1,7 +1,6 @@
 package com.example.assignment_ph33001.ScreenBottom
 
 import android.content.Intent
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,25 +31,28 @@ import com.example.assignment_ph33001.ui.theme.GelasioMedium
 import com.example.assignment_ph33001.ui.theme.NunitoSans
 
 @Composable
-fun HomeScreenContent(navController: Context, context: NavHostController) {
-    val context = LocalContext.current
+fun HomeScreenContent(navController: NavHostController) {
+
     val categories = remember { mutableStateOf(emptyList<Category>()) }
     val selectedCategory = remember { mutableStateOf<Category?>(null) }
 
     LaunchedEffect(Unit) {
-        val loadedCategories = ProductRepository.loadCategories(context)
-        categories.value = loadedCategories
-        selectedCategory.value = loadedCategories.firstOrNull()
+        ProductRepository.loadCategories { loadedCategories ->
+            categories.value = loadedCategories
+            selectedCategory.value = loadedCategories.firstOrNull()
+        }
     }
 
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
-        TopBar()
+        TopBar(isHomeScreen = true)
 
         Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
             if (categories.value.isEmpty()) {
-                Text(text = "Không có danh mục nào", modifier = Modifier.padding(16.dp), textAlign = TextAlign.Center)
+                Text(text = "Loading",
+                    modifier = Modifier.padding(16.dp),
+                    textAlign = TextAlign.Center)
             } else {
                 CategoryList(categories.value, selectedCategory)
                 Spacer(modifier = Modifier.height(10.dp))
@@ -61,7 +63,7 @@ fun HomeScreenContent(navController: Context, context: NavHostController) {
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(isHomeScreen: Boolean) {
     Row(
         modifier = Modifier.fillMaxWidth()
             .padding(start = 8.dp, top = 20.dp, end = 8.dp, bottom = 10.dp),
@@ -94,11 +96,19 @@ fun TopBar() {
                 fontWeight = FontWeight.Medium
             )
         }
-        Image(
-            painter = painterResource(id = R.drawable.outline_shopping_cart_24),
-            contentDescription = "Cart Icon",
-            modifier = Modifier.size(30.dp)
-        )
+        if(isHomeScreen){
+            Image(
+                painter = painterResource(id = R.drawable.outline_shopping_cart_24),
+                contentDescription = "Cart Icon",
+                modifier = Modifier.size(30.dp)
+            )
+        }else{
+            Image(
+                painter = painterResource(id = R.drawable.logout),
+                contentDescription = "Cart Icon",
+                modifier = Modifier.size(30.dp)
+            )
+        }
     }
 }
 
@@ -152,7 +162,7 @@ fun getCategoryIconResId(iconName: String): Int {
 }
 
 @Composable
-fun ProductList(products: List<Product>, navController: Context) {
+fun ProductList(products: List<Product>, navController: NavHostController) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
@@ -167,24 +177,15 @@ fun ProductList(products: List<Product>, navController: Context) {
 }
 
 @Composable
-fun ProductItem(product: Product, navController: Context) {
-    val context = LocalContext.current
-
+fun ProductItem(product: Product, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                val intent = Intent(context, DetailProducts::class.java).apply {
-                    putExtra("PRODUCT_ID", product.id)
-                    putExtra("PRODUCT_NAME", product.name)
-                    putExtra("PRODUCT_IMAGE", product.image)
-                    putExtra("PRODUCT_PRICE", product.price.toString())
-                    putExtra("PRODUCT_RATE", product.rate)
-                    putExtra("PRODUCT_DESCRIPTION", product.description)
-                    putExtra("PRODUCT_REVIEW", product.review)
-                }
-                context.startActivity(intent)
+                navController.navigate(
+                    "product_detail/${product.id}/${product.name}/${product.image}/${product.price}/${product.rate}/${product.description}/${product.review}"
+                )
             },
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -194,8 +195,13 @@ fun ProductItem(product: Product, navController: Context) {
             AsyncImage(
                 model = product.image,
                 contentDescription = product.name,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                modifier = Modifier.fillMaxWidth()
+                    .height(150.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                onLoading = { /* Optional loading state */ },
+                onError = { /* Optional error state */ }
             )
 
             Image(
