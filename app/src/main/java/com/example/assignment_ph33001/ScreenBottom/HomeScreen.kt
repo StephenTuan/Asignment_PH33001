@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -24,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.assignment_ph33001.R
+import com.example.assignment_ph33001.model.FavoriteViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
@@ -40,6 +43,7 @@ class HomeScreen : ComponentActivity() {
 fun AppContent(context: Context) {
     val systemUiController = rememberSystemUiController()
     val statusBarColor = Color.White
+    val favoriteViewModel: FavoriteViewModel = viewModel()  // Fixed: Properly initialize ViewModel
 
     SideEffect {
         systemUiController.setStatusBarColor(color = statusBarColor)
@@ -50,7 +54,8 @@ fun AppContent(context: Context) {
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavigationGraph(navController)
+            NavigationGraph(navController = navController,
+                favoriteViewModel = favoriteViewModel)
         }
     }
 }
@@ -104,23 +109,31 @@ fun currentRoute(navController: NavHostController): String? {
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, favoriteViewModel: FavoriteViewModel) {
+
     NavHost(navController, startDestination = "home") {
-        composable("home") { HomeScreenContent(navController) }
-        composable("favorite") { FavoriteScreenContent() }
+        composable("home") { HomeScreenContent(navController = navController,favoriteViewModel = favoriteViewModel) }
+        composable("favorite") { FavoriteScreenContent(favoriteViewModel = favoriteViewModel) }
         composable("notification") { NotificationScreenContent() }
         composable("profile") { ProfileScreenContent() }
 
         composable(
-            "product_detail/{productId}/{productName}/{productImage}/{productPrice}/{productRate}/{productDescription}/{productReview}",
+            "product_detail/" +
+                    "{productId}/" +
+                    "{productName}/" +
+                    "{productImage}/" +
+                    "{productPrice}/" +
+                    "{productRate}/" +
+                    "{productDescription}/" +
+                    "{productReview}",
             arguments = listOf(
                 navArgument("productId") { type = NavType.StringType },
                 navArgument("productName") { type = NavType.StringType },
                 navArgument("productImage") { type = NavType.StringType },
                 navArgument("productPrice") { type = NavType.StringType },
-//                navArgument("productRate") { type = NavType.StringType },
-//                navArgument("productDescription") { type = NavType.StringType },
-//                navArgument("productReview") { type = NavType.StringType }
+                navArgument("productRate") { type = NavType.StringType },
+                navArgument("productDescription") { type = NavType.StringType },
+                navArgument("productReview") { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull() ?: 0
@@ -129,9 +142,9 @@ fun NavigationGraph(navController: NavHostController) {
                 backStackEntry.arguments?.getString("productImage") ?: "", "UTF-8"
             )
             val productPrice = backStackEntry.arguments?.getString("productPrice")?.toFloatOrNull() ?: 0f
-//            val productRate = backStackEntry.arguments?.getString("productRate") ?: ""
-//            val productDescription = backStackEntry.arguments?.getString("productDescription") ?: ""
-//            val productReview = backStackEntry.arguments?.getString("productReview") ?: ""
+            val productRate = backStackEntry.arguments?.getString("productRate") ?.toFloatOrNull() ?: 0f
+            val productDescription = backStackEntry.arguments?.getString("productDescription") ?: ""
+            val productReview = backStackEntry.arguments?.getString("productReview") ?: ""
 
         }
     }

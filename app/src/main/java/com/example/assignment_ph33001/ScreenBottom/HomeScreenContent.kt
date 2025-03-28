@@ -1,6 +1,7 @@
 package com.example.assignment_ph33001.ScreenBottom
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.*
@@ -25,13 +27,14 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.assignment_ph33001.R
 import com.example.assignment_ph33001.model.Category
+import com.example.assignment_ph33001.model.FavoriteViewModel
 import com.example.assignment_ph33001.model.Product
 import com.example.assignment_ph33001.repository.ProductRepository
 import com.example.assignment_ph33001.ui.theme.GelasioMedium
 import com.example.assignment_ph33001.ui.theme.NunitoSans
 
 @Composable
-fun HomeScreenContent(navController: NavHostController) {
+fun HomeScreenContent(navController: NavHostController,favoriteViewModel: FavoriteViewModel) {
 
     val categories = remember { mutableStateOf(emptyList<Category>()) }
     val selectedCategory = remember { mutableStateOf<Category?>(null) }
@@ -46,7 +49,7 @@ fun HomeScreenContent(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
-        TopBar(isHomeScreen = true)
+        TopBar(isHomeScreen = true, isFavoriteScreen = false)
 
         Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
             if (categories.value.isEmpty()) {
@@ -56,14 +59,15 @@ fun HomeScreenContent(navController: NavHostController) {
             } else {
                 CategoryList(categories.value, selectedCategory)
                 Spacer(modifier = Modifier.height(10.dp))
-                ProductList(selectedCategory.value?.products ?: emptyList(), navController)
+                ProductList(selectedCategory.value?.products ?: emptyList(), navController,
+                   favoriteViewModel)
             }
         }
     }
 }
 
 @Composable
-fun TopBar(isHomeScreen: Boolean) {
+fun TopBar(isHomeScreen: Boolean, isFavoriteScreen: Boolean) {
     Row(
         modifier = Modifier.fillMaxWidth()
             .padding(start = 8.dp, top = 20.dp, end = 8.dp, bottom = 10.dp),
@@ -75,39 +79,83 @@ fun TopBar(isHomeScreen: Boolean) {
             contentDescription = "Search Icon",
             modifier = Modifier.size(30.dp)
         )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Apple",
-                color = colorResource(id = R.color.xamdeu),
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center,
-                fontFamily = GelasioMedium,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                text = "STORE",
-                color = colorResource(id = R.color.backgroundButtonOb),
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center,
-                fontFamily = GelasioMedium,
-                fontWeight = FontWeight.Medium
-            )
+            when {
+                isHomeScreen -> {
+                    Image(
+                        painter = painterResource(id = R.drawable.apple),
+                        contentDescription = "",
+                        modifier = Modifier.size(24.dp)
+                    )
+//                    Text(
+//                        text = " Apple",
+//                        color = colorResource(id = R.color.title1),
+//                        fontSize = 24.sp,
+//                        textAlign = TextAlign.Center,
+//                        fontFamily = GelasioMedium,
+//                        fontWeight = FontWeight.Medium
+//                    )
+                    Text(
+                        text = " STORE",
+                        color = colorResource(id = R.color.backgroundButtonOb),
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center,
+                        fontFamily = GelasioMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                isFavoriteScreen -> {
+                    Text(
+                        text = "Favorite",
+                        color = colorResource(id = R.color.backgroundButtonOb),
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center,
+                        fontFamily = GelasioMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                else -> {
+                    Text(
+                        text = "Profile",
+                        color = colorResource(id = R.color.backgroundButtonOb),
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center,
+                        fontFamily = GelasioMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
         }
-        if(isHomeScreen){
-            Image(
-                painter = painterResource(id = R.drawable.outline_shopping_cart_24),
-                contentDescription = "Cart Icon",
-                modifier = Modifier.size(30.dp)
-            )
-        }else{
-            Image(
-                painter = painterResource(id = R.drawable.logout),
-                contentDescription = "Cart Icon",
-                modifier = Modifier.size(30.dp)
-            )
+        when {
+            isHomeScreen -> {
+                Image(
+                    painter = painterResource(id = R.drawable.outline_shopping_cart_24),
+                    contentDescription = "Cart Icon",
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+
+            isFavoriteScreen -> {
+                Image(
+                    painter = painterResource(id = R.drawable.outline_shopping_cart_24),
+                    contentDescription = "Cart Icon",
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+
+            else -> {
+                Image(
+                    painter = painterResource(id = R.drawable.logout),
+                    contentDescription = "Cart Icon",
+                    modifier = Modifier.size(24.dp),
+                    colorFilter = ColorFilter.tint(Color(0xFF808080))
+                )
+            }
         }
     }
 }
@@ -162,7 +210,11 @@ fun getCategoryIconResId(iconName: String): Int {
 }
 
 @Composable
-fun ProductList(products: List<Product>, navController: NavHostController) {
+fun ProductList(
+    products: List<Product>,
+    navController: NavHostController,
+    favoriteViewModel: FavoriteViewModel
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
@@ -171,21 +223,30 @@ fun ProductList(products: List<Product>, navController: NavHostController) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(products) { product ->
-            ProductItem(product, navController)
+            ProductItem(
+                product, navController, favoriteViewModel)
         }
     }
 }
 
 @Composable
-fun ProductItem(product: Product, navController: NavHostController) {
+fun ProductItem(product: Product, navController: NavHostController, favoriteViewModel: FavoriteViewModel) {
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                navController.navigate(
-                    "product_detail/${product.id}/${product.name}/${product.image}/${product.price}/${product.rate}/${product.description}/${product.review}"
-                )
+                val intent = Intent(context, DetailProducts::class.java).apply {
+                    putExtra("PRODUCT_ID", product.id)
+                    putExtra("PRODUCT_NAME", product.name)
+                    putExtra("PRODUCT_IMAGE", product.image)
+                    putExtra("PRODUCT_PRICE", product.price.toString())
+                    putExtra("PRODUCT_RATE", product.rate.toString())
+                    putExtra("PRODUCT_DESCRIPTION", product.description)
+                    putExtra("PRODUCT_REVIEW", product.review)
+                }
+                context.startActivity(intent)
             },
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -212,6 +273,14 @@ fun ProductItem(product: Product, navController: NavHostController) {
                     .clip(RoundedCornerShape(5.dp))
                     .size(24.dp)
                     .background(Color.LightGray)
+                    .clickable {
+                        try {
+                            favoriteViewModel.addToFavorites(product)
+                            Toast.makeText(context, "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "Thêm vào yêu thích thất bại", Toast.LENGTH_SHORT).show()
+                        }
+                    }
             )
         }
 
