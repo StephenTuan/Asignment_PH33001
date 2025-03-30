@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -23,9 +24,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.assignment_ph33001.R
+import com.example.assignment_ph33001.model.CartViewModel
 import com.example.assignment_ph33001.model.Category
 import com.example.assignment_ph33001.model.FavoriteViewModel
 import com.example.assignment_ph33001.model.Product
@@ -39,6 +43,7 @@ fun HomeScreenContent(navController: NavHostController,favoriteViewModel: Favori
     val categories = remember { mutableStateOf(emptyList<Category>()) }
     val selectedCategory = remember { mutableStateOf<Category?>(null) }
 
+
     LaunchedEffect(Unit) {
         ProductRepository.loadCategories { loadedCategories ->
             categories.value = loadedCategories
@@ -49,7 +54,10 @@ fun HomeScreenContent(navController: NavHostController,favoriteViewModel: Favori
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
-        TopBar(isHomeScreen = true, isFavoriteScreen = false)
+        TopBar(
+            isHomeScreen = true, isFavoriteScreen = false,
+            navController = navController
+        )
 
         Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
             if (categories.value.isEmpty()) {
@@ -67,7 +75,7 @@ fun HomeScreenContent(navController: NavHostController,favoriteViewModel: Favori
 }
 
 @Composable
-fun TopBar(isHomeScreen: Boolean, isFavoriteScreen: Boolean) {
+fun TopBar(isHomeScreen: Boolean, isFavoriteScreen: Boolean, navController: NavHostController?) {
     Row(
         modifier = Modifier.fillMaxWidth()
             .padding(start = 8.dp, top = 20.dp, end = 8.dp, bottom = 10.dp),
@@ -117,9 +125,7 @@ fun TopBar(isHomeScreen: Boolean, isFavoriteScreen: Boolean) {
                         fontFamily = GelasioMedium,
                         fontWeight = FontWeight.Medium
                     )
-                }
-
-                else -> {
+                }else -> {
                     Text(
                         text = "Profile",
                         color = colorResource(id = R.color.backgroundButtonOb),
@@ -137,18 +143,27 @@ fun TopBar(isHomeScreen: Boolean, isFavoriteScreen: Boolean) {
                     painter = painterResource(id = R.drawable.outline_shopping_cart_24),
                     contentDescription = "Cart Icon",
                     modifier = Modifier.size(30.dp)
+                        .clickable(
+                            onClick = {
+                                navController?.navigate("cart_screen")
+                            }
+                        )
                 )
             }
 
             isFavoriteScreen -> {
+
                 Image(
                     painter = painterResource(id = R.drawable.outline_shopping_cart_24),
                     contentDescription = "Cart Icon",
                     modifier = Modifier.size(30.dp)
+                        .clickable(
+                            onClick = {
+                                navController?.navigate("cart_screen")
+                            }
+                        )
                 )
-            }
-
-            else -> {
+            }else -> {
                 Image(
                     painter = painterResource(id = R.drawable.logout),
                     contentDescription = "Cart Icon",

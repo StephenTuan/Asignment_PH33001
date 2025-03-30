@@ -1,14 +1,10 @@
 package com.example.assignment_ph33001.ScreenBottom
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,15 +24,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.assignment_ph33001.R
 
 @Composable
-fun ProfileScreenContent() {
+fun ProfileScreenContent(navController: NavController) {
 
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -45,7 +41,7 @@ fun ProfileScreenContent() {
         modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopBar(isHomeScreen = false,isFavoriteScreen = false)
+        TopBar(isHomeScreen = false, isFavoriteScreen = false, navController = null)
         Row(
             modifier = Modifier.padding(top = 10.dp, bottom = 15.dp).width(screenWidth*0.9f).height(screenHeight*0.1f)
 //                .background(Color.Yellow),

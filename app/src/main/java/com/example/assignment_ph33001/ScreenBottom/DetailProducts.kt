@@ -2,8 +2,10 @@ package com.example.assignment_ph33001.ScreenBottom
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -31,12 +33,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.assignment_ph33001.R
+import com.example.assignment_ph33001.model.CartViewModel
+
+import com.example.assignment_ph33001.model.Product
 import com.example.assignment_ph33001.ui.theme.Assignment_PH33001Theme
 import com.example.assignment_ph33001.ui.theme.GelasioMedium
 import com.example.assignment_ph33001.ui.theme.NunitoSans
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class DetailProducts : ComponentActivity() {
+
+    private val cartViewModel: CartViewModel by viewModels()  // Add this line
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,6 +56,16 @@ class DetailProducts : ComponentActivity() {
         val productRate = intent.getStringExtra("PRODUCT_RATE") ?: ""
         val productDescription = intent.getStringExtra("PRODUCT_DESCRIPTION") ?: ""
         val productReview = intent.getStringExtra("PRODUCT_REVIEW") ?: ""
+
+        val product = Product(
+            id = productId,
+            name = productName,
+            image = productImage,
+            price = productPrice.toDouble(),
+            rate = productRate.toDouble(),
+            description = productDescription,
+            review = productReview
+        )
 
         setContent {
             Assignment_PH33001Theme {
@@ -59,7 +78,9 @@ class DetailProducts : ComponentActivity() {
                         productRate = productRate.toString(),
                         productDescription = productDescription,
                         productReview = productReview,
-                        navController = null
+                        navController = null,
+                        product = product,
+                        cartViewModel = cartViewModel
                     )
                 }
             }
@@ -76,7 +97,9 @@ fun DetailContent(
     productPrice: String,
     productRate: String,
     productDescription: String,
-    productReview: String, navController: NavController? = null
+    productReview: String, navController: NavController? = null,
+    cartViewModel: CartViewModel,
+    product: Product
 ) {
     val activity = LocalContext.current as? ComponentActivity
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
@@ -160,6 +183,7 @@ fun DetailContent(
             }
         }
         //TTSP
+        val context = LocalContext.current
 
         val heightTTSP = screenHeight * 0.4f
         Column(
@@ -309,7 +333,10 @@ fun DetailContent(
                         .height(heightFooter * 0.8f), // Đảm bảo cùng chiều cao với Bookmark
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.backgroundButtonOb)),
                     shape = MaterialTheme.shapes.small,
-                    onClick = {}
+                    onClick = {
+                        cartViewModel.addToCart(product)
+                        Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show()
+                    }
                 ) {
                     Text(
                         text = "Add to cart",
