@@ -165,7 +165,6 @@ fun FavoriteProductItem(product: Product) {
                     painter = painterResource(id = R.drawable.cartfavorite),
                     contentDescription = "",
                     modifier = Modifier.size(24.dp),
-
                 )
             }
         }

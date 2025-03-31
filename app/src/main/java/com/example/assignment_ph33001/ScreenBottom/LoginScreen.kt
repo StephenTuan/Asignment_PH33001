@@ -1,4 +1,4 @@
-package com.example.assignment_ph33001
+package com.example.assignment_ph33001.ScreenBottom
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
-import com.example.assignment_ph33001.ScreenBottom.HomeScreen
+import com.example.assignment_ph33001.R
 import com.example.assignment_ph33001.model.User
 import com.example.assignment_ph33001.ui.theme.Assignment_PH33001Theme
 import com.example.assignment_ph33001.ui.theme.GelasioMedium

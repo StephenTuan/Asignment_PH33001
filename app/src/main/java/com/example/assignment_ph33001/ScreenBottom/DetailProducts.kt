@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.assignment_ph33001.MyApp
 import com.example.assignment_ph33001.R
 import com.example.assignment_ph33001.model.CartViewModel
 
@@ -48,6 +49,8 @@ class DetailProducts : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val cartViewModel = (application as MyApp).cartViewModel
 
         val productId = intent.getIntExtra("PRODUCT_ID", 0)
         val productName = intent.getStringExtra("PRODUCT_NAME") ?: ""

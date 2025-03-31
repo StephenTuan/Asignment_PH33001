@@ -10,12 +10,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,27 +23,30 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.assignment_ph33001.MyApp
 import com.example.assignment_ph33001.R
-import com.example.assignment_ph33001.model.CartViewModel
 import com.example.assignment_ph33001.model.FavoriteViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.net.URLDecoder
-
 
 class HomeScreen() : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppContent()
+            AppContent(
+                context = this
+            )
         }
     }
 }
 
 @Composable
-fun AppContent() {
+fun AppContent(context: Context) {
+
     val systemUiController = rememberSystemUiController()
     val statusBarColor = Color.White
     val favoriteViewModel: FavoriteViewModel = viewModel()  // Fixed: Properly initialize ViewModel
+    val cartViewModel = (context.applicationContext as MyApp).cartViewModel
 
     SideEffect {
         systemUiController.setStatusBarColor(color = statusBarColor)
@@ -55,10 +57,9 @@ fun AppContent() {
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            val cartViewModel: CartViewModel = viewModel()
             NavigationGraph(
                 navController = navController,
-                favoriteViewModel = favoriteViewModel, cartViewModel = cartViewModel)
+                favoriteViewModel = favoriteViewModel)
         }
     }
 }
@@ -114,18 +115,15 @@ fun currentRoute(navController: NavHostController): String? {
 @Composable
 fun NavigationGraph(
     navController: NavHostController, favoriteViewModel: FavoriteViewModel
-    , cartViewModel: CartViewModel,  // Fix: Change Nothing? to CartViewModel
-    modifier: Modifier = Modifier
 ) {
 
-    NavHost(navController, startDestination = "home") {
-        composable("home") { HomeScreenContent(navController = navController,favoriteViewModel = favoriteViewModel) }
-        composable("favorite") { FavoriteScreenContent(favoriteViewModel = favoriteViewModel,navController = navController) }
+    val cartViewModel = (LocalContext.current.applicationContext as MyApp).cartViewModel
+
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") { HomeScreenContent(navController,favoriteViewModel = favoriteViewModel) }
+        composable("favorite") { FavoriteScreenContent(favoriteViewModel = favoriteViewModel,navController) }
         composable("notification") { NotificationScreenContent() }
-        composable("profile") { ProfileScreenContent(navController = navController) }
-        composable("cart_screen") {
-            CartScreen(cartViewModel = cartViewModel)
-        }
+        composable("profile") { ProfileScreenContent(navController) }
 
         composable(
             "product_detail/" +

@@ -76,6 +76,7 @@ fun HomeScreenContent(navController: NavHostController,favoriteViewModel: Favori
 
 @Composable
 fun TopBar(isHomeScreen: Boolean, isFavoriteScreen: Boolean, navController: NavHostController?) {
+    val context = LocalContext.current
     Row(
         modifier = Modifier.fillMaxWidth()
             .padding(start = 8.dp, top = 20.dp, end = 8.dp, bottom = 10.dp),
@@ -145,7 +146,8 @@ fun TopBar(isHomeScreen: Boolean, isFavoriteScreen: Boolean, navController: NavH
                     modifier = Modifier.size(30.dp)
                         .clickable(
                             onClick = {
-                                navController?.navigate("cart_screen")
+                                val intent = Intent(context, CartScreen::class.java)
+                                context.startActivity(intent)
                             }
                         )
                 )
