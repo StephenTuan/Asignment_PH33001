@@ -222,7 +222,10 @@ fun CartScreenContent(cartViewModel: CartViewModel,navController: NavController?
                         .background(Color.White)
                 ) {
                     Button(
-                        onClick = { /* Implement checkout */ },
+                        onClick = {
+                            val intent = Intent(context, CheckOutScreen::class.java)
+                            context.startActivity(intent)
+                        },
                         modifier = Modifier
                             .width(screenWith*0.92f)
                             .height(50.dp),

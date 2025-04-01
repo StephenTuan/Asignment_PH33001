@@ -35,6 +35,7 @@
 <!--        <activity android:name=".ScreenBottom.HomeScreen"/>-->
         <activity
             android:name=".ScreenBottom.CartScreen" />
+        <activity android:name=".ScreenBottom.CheckOutScreen"/>
     </application>
 
 
