@@ -3,6 +3,7 @@ package com.example.assignment_ph33001.ScreenBottom
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import com.example.assignment_ph33001.R
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.ui.draw.shadow
 
 
 class CheckOutScreen : ComponentActivity() {
@@ -102,21 +104,29 @@ fun CheckOutScreenContent() {
                         }
                     }
                     Card(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
-                            .background(Color.White),
-                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.width(screenWith*0.9f).padding(bottom = 16.dp)
+                            .background(Color.White)
+                            .shadow(8.dp, shape = RoundedCornerShape(5.dp)).background(Color.White),
                         elevation = CardDefaults.elevatedCardElevation(4.dp),
                     ) {
                         Text(
-                            text = "Shipping Address Details",
-                            modifier = Modifier.padding(16.dp)
+                            text = "Nguyen Anh Tuan",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.fillMaxWidth()
+                                .background(Color.White).padding(10.dp)
+                        )
+                        Text(
+                            text = "So 46, ngach 143/45, duong Xuan Phuong, phuong Phuong Canh, Nam Tu Liem",
+                            fontSize = 18.sp,
+                            modifier = Modifier.fillMaxWidth().background(Color.White).padding(10.dp)
                         )
                     }
                 }
 
                 item {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                        modifier = Modifier.fillMaxWidth().background(Color.White),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -130,21 +140,32 @@ fun CheckOutScreenContent() {
                         }
                     }
                     Card(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
-                            .background(Color.White),
-                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.width(screenWith*0.9f).padding(bottom = 16.dp)
+                            .background(Color.White)
+                            .shadow(8.dp, shape = RoundedCornerShape(5.dp)).background(Color.White),
                         elevation = CardDefaults.elevatedCardElevation(4.dp),
                     ) {
-                        Text(
-                            text = "Payment Details",
-                            modifier = Modifier.padding(16.dp)
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth().background(Color.White)
+                        ){
+                            Image(
+                                painter = painterResource(id = R.drawable.payment),
+                                contentDescription = "",
+                                modifier = Modifier.size(35.dp).background(Color.White)
+                            )
+                            Text(
+                                text = "**** **** **** 1972",
+                                fontSize = 18.sp,
+                                modifier = Modifier.background(Color.White).padding(20.dp)
+                            )
+                        }
                     }
                 }
 
                 item {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                        modifier = Modifier.fillMaxWidth().background(Color.White),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -162,49 +183,109 @@ fun CheckOutScreenContent() {
                         }
                     }
                     Card(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
-                            .background(Color.White),
-                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.width(screenWith*0.9f).padding(bottom = 16.dp)
+                            .background(Color.White)
+                            .shadow(8.dp, shape = RoundedCornerShape(5.dp)).background(Color.White),
                         elevation = CardDefaults.elevatedCardElevation(4.dp),
                     ) {
-                        Text(
-                            text = "Delivery Method Details",
-                            modifier = Modifier.padding(16.dp)
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.background(Color.White).fillMaxWidth()
+                        ){
+                            Image(
+                                painter = painterResource(id = R.drawable.delivery),
+                                contentDescription = "",
+                                modifier = Modifier.size(35.dp)
+                                    .background(Color.White)
+                            )
+                            Text(
+                                text = "Fast( 2-3 day )",
+                                fontSize = 18.sp,
+                                modifier = Modifier.background(Color.White).padding(20.dp)
+                            )
+                        }
                     }
                 }
             }
         }
 
         Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter).background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter).background(Color.White),
+                horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier.width(screenWith * 0.92f),
-                verticalArrangement = Arrangement.SpaceBetween
+            Box(
+                modifier = Modifier
+                    .width(screenWith * 0.92f)
+                    .shadow(4.dp, shape = RoundedCornerShape(8.dp))
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .padding(12.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "Order: $${String.format("%.2f", orderTotal)}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = colorResource(id = R.color.desOB),
-                    modifier = Modifier
-                )
-                Text(
-                    text = "Delivery: $${String.format("%.2f", deliveryFee)}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                )
-                Text(
-                    text = "Total: $${String.format("%.2f", totalAmount)}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                )
+                Column(
+                    modifier = Modifier.width(screenWith * 0.92f),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Order:",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = colorResource(id = R.color.desOB),
+                            modifier = Modifier
+                        )
+                        Text(
+                            text = "$${String.format("%.2f", orderTotal)}",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = Color.Black,
+                            modifier = Modifier
+                        )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Delivery:",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = colorResource(id = R.color.desOB),
+                            modifier = Modifier
+
+                        )
+                        Text(
+                            text = "$${String.format("%.2f", deliveryFee)}",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = Color.Black,
+                            modifier = Modifier
+
+                        )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.padding(bottom = 5.dp).fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Total:",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = colorResource(id = R.color.desOB),
+                            modifier = Modifier
+                        )
+                        Text(
+                            text = "$${String.format("%.2f", totalAmount)}",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = Color.Black,
+                            modifier = Modifier
+                        )
+                    }
+                }
             }
 
             Box(

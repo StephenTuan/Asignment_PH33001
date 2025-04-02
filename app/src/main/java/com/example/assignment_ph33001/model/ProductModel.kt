@@ -7,8 +7,9 @@ data class Category(
     val id: String = "",
     val name: String = "",
     val icon: String = "",
-    val products: List<Product> = emptyList()
+    val products: List<Product> = emptyList()  // Changed back to List
 )
+
 data class Product(
     val id: Int = 0,
     val name: String = "",
