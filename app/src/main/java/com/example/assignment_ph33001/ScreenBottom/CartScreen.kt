@@ -224,6 +224,7 @@ fun CartScreenContent(cartViewModel: CartViewModel,navController: NavController?
                     Button(
                         onClick = {
                             val intent = Intent(context, CheckOutScreen::class.java)
+                            intent.putExtra("TOTAL_AMOUNT", total)
                             context.startActivity(intent)
                         },
                         modifier = Modifier

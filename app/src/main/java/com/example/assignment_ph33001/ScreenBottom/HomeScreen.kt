@@ -42,7 +42,6 @@ class HomeScreen() : ComponentActivity() {
 
 @Composable
 fun AppContent(context: Context) {
-
     val systemUiController = rememberSystemUiController()
     val statusBarColor = Color.White
     val favoriteViewModel: FavoriteViewModel = viewModel()  // Fixed: Properly initialize ViewModel
@@ -71,7 +70,6 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem("favorite", "Favorite", R.drawable.bookmark),
         BottomNavItem("notification", "Notification", R.drawable.notification),
         BottomNavItem("profile", "Profile", R.drawable.profile)
-
     )
 
     NavigationBar(containerColor = Color.White) {
@@ -116,15 +114,13 @@ fun currentRoute(navController: NavHostController): String? {
 fun NavigationGraph(
     navController: NavHostController, favoriteViewModel: FavoriteViewModel
 ) {
-
     val cartViewModel = (LocalContext.current.applicationContext as MyApp).cartViewModel
-
     NavHost(navController = navController, startDestination = "home") {
         composable("home") { HomeScreenContent(navController,favoriteViewModel = favoriteViewModel) }
         composable("favorite") { FavoriteScreenContent(favoriteViewModel = favoriteViewModel,navController) }
         composable("notification") { NotificationScreenContent() }
         composable("profile") { ProfileScreenContent(navController) }
-
+        composable("cart_screen") { CartScreenContent(cartViewModel, navController) }
         composable(
             "product_detail/" +
                     "{productId}/" +
@@ -153,10 +149,6 @@ fun NavigationGraph(
             val productRate = backStackEntry.arguments?.getString("productRate") ?.toFloatOrNull() ?: 0f
             val productDescription = backStackEntry.arguments?.getString("productDescription") ?: ""
             val productReview = backStackEntry.arguments?.getString("productReview") ?: ""
-
         }
     }
 }
-
-
-

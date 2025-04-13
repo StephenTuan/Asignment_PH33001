@@ -1,5 +1,6 @@
 package com.example.assignment_ph33001.ScreenBottom
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -41,6 +43,8 @@ import com.example.assignment_ph33001.model.Product
 
 @Composable
 fun FavoriteScreenContent(favoriteViewModel: FavoriteViewModel,navController: NavHostController) {
+
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -73,7 +77,7 @@ fun FavoriteScreenContent(favoriteViewModel: FavoriteViewModel,navController: Na
                 .padding(16.dp)
         ) {
             Button(
-                onClick = { /* Your action here */ },
+                onClick = {},
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -124,12 +128,7 @@ fun FavoriteProductItem(product: Product) {
                     contentDescription = product.name,
                     modifier = Modifier
                         .size(120.dp)
-                        .clip(RoundedCornerShape(0.dp)),  // Add this to ensure sharp corners
-//                        .border(
-//                            width = 1.dp,
-//                            color = Color.LightGray,
-//                            shape = RoundedCornerShape(0.dp)  // Add this to ensure sharp corners
-//                        ),
+                        .clip(RoundedCornerShape(0.dp)),
                     contentScale = ContentScale.Crop,
                 )
 
@@ -159,7 +158,6 @@ fun FavoriteProductItem(product: Product) {
                     painter = painterResource(id = R.drawable.trash),
                     contentDescription = "",
                     modifier = Modifier.size(24.dp),
-//                    colorFilter = ColorFilter.tint(Color.Red)
                 )
                 Image(
                     painter = painterResource(id = R.drawable.cartfavorite),

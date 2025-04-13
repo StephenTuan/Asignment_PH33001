@@ -29,15 +29,18 @@ import androidx.compose.ui.draw.shadow
 class CheckOutScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val totalAmount = intent.getDoubleExtra("TOTAL_AMOUNT", 0.0)
+
         setContent {
-                CheckOutScreenContent()
+                CheckOutScreenContent(totalAmount)
         }
     }
 }
 @Composable
-fun CheckOutScreenContent() {
+fun CheckOutScreenContent(totalAmount: Double) {
 
-    val orderTotal: Float = 100.0f // Example value, replace with actual calculation
+    val orderTotal: Float = totalAmount.toFloat() // Example value, replace with actual calculation
     val deliveryFee: Float = 5.0f
     val totalAmount = orderTotal + deliveryFee
     val screenWith = LocalConfiguration.current.screenWidthDp.dp
