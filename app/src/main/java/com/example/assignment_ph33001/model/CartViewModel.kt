@@ -1,11 +1,21 @@
 package com.example.assignment_ph33001.model
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.State
 
 class CartViewModel : ViewModel() {
     private val _cartItems = mutableStateListOf<CartItem>()
     val cartItems: List<CartItem> = _cartItems
+
+    private val _totalAmount = mutableStateOf(0.0)
+    val totalAmount: State<Double> = _totalAmount
+
+    fun clearCart() {
+        _cartItems.clear()
+        _totalAmount.value = 0.0
+    }
 
     fun addToCart(product: Product) {
         val existingItem = _cartItems.find { it.product.id == product.id }

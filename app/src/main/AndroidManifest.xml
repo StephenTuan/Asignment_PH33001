@@ -25,7 +25,6 @@
             android:theme="@style/Theme.Assignment_PH33001">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -33,8 +32,8 @@
         <activity android:name=".ScreenBottom.SignUp"/>
         <activity android:name=".ScreenBottom.DetailProducts"/>
         <activity android:name=".ScreenBottom.HomeScreen"/>
-        <activity
-            android:name=".ScreenBottom.CartScreen" />
+        <activity android:name=".ScreenBottom.CartScreen" />
         <activity android:name=".ScreenBottom.CheckOutScreen"/>
+        <activity android:name=".ScreenBottom.CheckoutSuccessScreen" />
     </application>
 </manifest>

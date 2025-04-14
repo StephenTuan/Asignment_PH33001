@@ -1,5 +1,6 @@
 package com.example.assignment_ph33001.ScreenBottom
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -45,12 +46,12 @@ class CheckOutScreen() : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-                CheckOutScreenContent(totalAmount,navController, cartViewModel)
+                CheckOutScreenContent(totalAmount, cartViewModel)
         }
     }
 }
 @Composable
-fun CheckOutScreenContent(totalAmount: Double,navController: NavController, cartViewModel: CartViewModel) {
+fun CheckOutScreenContent(totalAmount: Double, cartViewModel: CartViewModel) {
     val context = LocalContext.current
     val orderTotal: Float = totalAmount.toFloat() // Example value, replace with actual calculation
     val deliveryFee: Float = 5.0f
@@ -313,22 +314,35 @@ fun CheckOutScreenContent(totalAmount: Double,navController: NavController, cart
                         val invoiceData = mapOf(
                             "invoiceId" to invoiceId,
                             "date" to System.currentTimeMillis(),
+                            "totalAmount" to totalAmount,  // Thêm tổng tiền
                             "items" to cartViewModel.cartItems.map { item ->
                                 mapOf(
                                     "name" to item.product.name,
                                     "price" to item.product.price,
-                                    "quantity" to item.quantity
+                                    "quantity" to item.quantity,
+                                    "subtotal" to (item.product.price * item.quantity) // Thêm tổng tiền của mỗi sản phẩm
                                 )
-                            }
+                            },
+                            "status" to "pending",  // Thêm trạng thái đơn hàng
+                            "shippingAddress" to "Your shipping address", // Thêm địa chỉ giao hàng
+                            "paymentMethod" to "COD" // Thêm phương thức thanh toán
                         )
+
                         val userEmail = FirebaseAuth.getInstance().currentUser?.email
                         userEmail?.let {
                             val firestore = FirebaseFirestore.getInstance()
-                            firestore.collection("invoices").document(it).collection("userInvoices").document(invoiceId)
+                            firestore.collection("invoices")
+                                .document(it)
+                                .collection("userInvoices")
+                                .document(invoiceId)
                                 .set(invoiceData)
                                 .addOnSuccessListener {
                                     Toast.makeText(context, "Checkout successful!", Toast.LENGTH_SHORT).show()
-                                    navController.navigate("checkout_success")
+                                    // Clear cart after successful checkout
+                                    cartViewModel.clearCart()
+                                    // Navigate to success screen
+                                    val intent = Intent(context, CheckoutSuccessScreen::class.java)
+                                    context.startActivity(intent)
                                 }
                                 .addOnFailureListener { e ->
                                     Toast.makeText(context, "Failed to save invoice: ${e.message}", Toast.LENGTH_SHORT).show()

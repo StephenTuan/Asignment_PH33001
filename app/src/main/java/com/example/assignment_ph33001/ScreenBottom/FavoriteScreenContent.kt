@@ -65,7 +65,10 @@ fun FavoriteScreenContent(favoriteViewModel: FavoriteViewModel,navController: Na
                     .padding(bottom = 80.dp)
             ) {
                 items(favoriteViewModel.favoriteProducts) { product ->
-                    FavoriteProductItem(product)
+                    FavoriteProductItem(
+                        product = product,
+                        favoriteViewModel = favoriteViewModel
+                    )
                 }
             }
         }
@@ -95,7 +98,7 @@ fun FavoriteScreenContent(favoriteViewModel: FavoriteViewModel,navController: Na
     }
 }
 @Composable
-fun FavoriteProductItem(product: Product) {
+fun FavoriteProductItem(product: Product, favoriteViewModel: FavoriteViewModel) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 

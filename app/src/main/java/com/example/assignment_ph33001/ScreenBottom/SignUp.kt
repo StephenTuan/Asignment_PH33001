@@ -238,6 +238,7 @@ fun SignUpContent(context: Context, Navigate1: () -> Unit) {
                                     val exceptionMessage = task.exception?.message
                                     if (exceptionMessage?.contains("Login success") == true) {
                                         Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+                                        Navigate1()
                                     } else {
                                         Toast.makeText(context, "Registration failed: $exceptionMessage", Toast.LENGTH_SHORT).show()
                                     }

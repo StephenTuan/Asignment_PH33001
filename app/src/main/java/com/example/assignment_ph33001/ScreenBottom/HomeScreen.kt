@@ -118,10 +118,16 @@ fun NavigationGraph(
     NavHost(navController = navController, startDestination = "home") {
         composable("home") { HomeScreenContent(navController,favoriteViewModel = favoriteViewModel) }
         composable("favorite") { FavoriteScreenContent(favoriteViewModel = favoriteViewModel,navController) }
-        composable("notification") { NotificationScreenContent() }
+        composable("notification") { NotificationScreenContent(navController) }
         composable("profile") { ProfileScreenContent(navController) }
         composable("cart_screen") { CartScreenContent(cartViewModel, navController) }
-        composable("checkout_screen") { CheckOutScreen(navController, cartViewModel)}
+        composable("checkout_screen") {
+            CheckOutScreenContent(
+                totalAmount = 0.0, // You might want to pass the actual total here
+
+                cartViewModel = cartViewModel
+            )
+        }
         composable(
             "product_detail/" +
                     "{productId}/" +
