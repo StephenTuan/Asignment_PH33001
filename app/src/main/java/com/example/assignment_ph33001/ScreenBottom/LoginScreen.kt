@@ -32,6 +32,7 @@ import com.example.assignment_ph33001.R
 import com.example.assignment_ph33001.model.User
 import com.example.assignment_ph33001.ui.theme.Assignment_PH33001Theme
 import com.example.assignment_ph33001.ui.theme.GelasioMedium
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import java.io.File
 
@@ -206,38 +207,19 @@ fun LoginContent(Navigate1: () -> Unit, Navigate2: () -> Unit) {
                             )
                             Button(
                                 onClick = {
-                                    when {
-                                        email.isBlank() && password.isBlank() -> {
-                                            Toast.makeText(context, "Không được để trống email và password", Toast.LENGTH_LONG).show()
-                                        }
-                                        else -> {
-                                            try {
-                                                val file = File(context.filesDir, "userData.json")
-                                                if (file.exists()) {
-                                                    val gson = Gson()
-                                                    val jsonString = file.readText()
-                                                    val userList: List<User> = gson.fromJson(jsonString, Array<User>::class.java).toList()
-
-                                                    val user = userList.find { it.email == email }
-
-                                                    if (user != null) {
-                                                        if (user.password == password) {
-                                                            Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
-                                                            Navigate2()
-                                                        } else {
-                                                            Toast.makeText(context, "Sai password", Toast.LENGTH_LONG).show()
-                                                        }
-                                                    } else {
-                                                        Toast.makeText(context, "Email chưa được đăng ký", Toast.LENGTH_LONG).show()
-                                                    }
+                                    if (email.isBlank() || password.isBlank()) {
+                                        Toast.makeText(context, "Không được để trống email và password", Toast.LENGTH_LONG).show()
+                                    } else {
+                                        val auth = FirebaseAuth.getInstance()
+                                        auth.signInWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener { task ->
+                                                if (task.isSuccessful) {
+                                                    Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
+                                                    Navigate2()
                                                 } else {
-                                                    Toast.makeText(context, "Chưa có dữ liệu người dùng", Toast.LENGTH_LONG).show()
+                                                    Toast.makeText(context, "Login Failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                                                 }
-                                            } catch (e: Exception) {
-                                                e.printStackTrace()
-                                                Toast.makeText(context, "Lỗi đọc dữ liệu", Toast.LENGTH_LONG).show()
                                             }
-                                        }
                                     }
                                 },
                                 modifier = Modifier

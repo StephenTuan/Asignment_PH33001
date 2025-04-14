@@ -121,6 +121,7 @@ fun NavigationGraph(
         composable("notification") { NotificationScreenContent() }
         composable("profile") { ProfileScreenContent(navController) }
         composable("cart_screen") { CartScreenContent(cartViewModel, navController) }
+        composable("checkout_screen") { CheckOutScreen(navController, cartViewModel)}
         composable(
             "product_detail/" +
                     "{productId}/" +

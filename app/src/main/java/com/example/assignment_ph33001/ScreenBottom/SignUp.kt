@@ -30,8 +30,11 @@ import com.example.assignment_ph33001.R
 import com.example.assignment_ph33001.model.User
 import com.example.assignment_ph33001.ui.theme.Assignment_PH33001Theme
 import com.example.assignment_ph33001.ui.theme.GelasioMedium
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import java.io.File
+
 
 class SignUp : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -198,18 +201,48 @@ fun SignUpContent(context: Context, Navigate1: () -> Unit) {
             Button(
                 onClick = {
                     if (name.isEmpty() || email.isEmpty() || password.isEmpty() || passwordCf.isEmpty()) {
-                        Toast.makeText(context, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show()
-                    } else if (!isValidEmail(email)) {
-                        Toast.makeText(context, "Email không đúng định dạng", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                     } else if (password != passwordCf) {
-                        Toast.makeText(context, "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
                     } else {
-                        val isSuccess = saveUserDataToJsonFile(context, User(name, email, password))
-                        if (isSuccess) {
-                            Toast.makeText(context, "Đăng ký thành công", Toast.LENGTH_SHORT).show()
-                            Navigate1()
-                        }
-                    }
+                        val auth = FirebaseAuth.getInstance()
+                        auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val userId = auth.currentUser?.uid
+                                    val firestore =
+                                        FirebaseFirestore.getInstance() // Initialize Firestore
+                                    val user = hashMapOf(
+                                        "name" to name,
+                                        "email" to email
+                                    )
+                                    userId?.let {
+                                        firestore.collection("users").document(it).set(user)
+                                            .addOnSuccessListener {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Registration successful",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                Navigate1()
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Toast.makeText(
+                                                    context,
+                                                    "Failed to save user data: ${e.message}",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    }
+                                } else {
+                                    val exceptionMessage = task.exception?.message
+                                    if (exceptionMessage?.contains("Login success") == true) {
+                                        Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(context, "Registration failed: $exceptionMessage", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }}
                 },
                 modifier = Modifier
                     .padding(start = 30.dp, end = 30.dp, top = 20.dp)

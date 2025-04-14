@@ -1,6 +1,7 @@
 package com.example.assignment_ph33001.ScreenBottom
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -24,22 +25,33 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.assignment_ph33001.MyApp
+import com.example.assignment_ph33001.model.CartViewModel
+import com.example.assignment_ph33001.repository.generateInvoiceId
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
-class CheckOutScreen : ComponentActivity() {
+class CheckOutScreen() : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val totalAmount = intent.getDoubleExtra("TOTAL_AMOUNT", 0.0)
+        val cartViewModel = (application as MyApp).cartViewModel
 
         setContent {
-                CheckOutScreenContent(totalAmount)
+            val navController = rememberNavController()
+                CheckOutScreenContent(totalAmount,navController, cartViewModel)
         }
     }
 }
 @Composable
-fun CheckOutScreenContent(totalAmount: Double) {
-
+fun CheckOutScreenContent(totalAmount: Double,navController: NavController, cartViewModel: CartViewModel) {
+    val context = LocalContext.current
     val orderTotal: Float = totalAmount.toFloat() // Example value, replace with actual calculation
     val deliveryFee: Float = 5.0f
     val totalAmount = orderTotal + deliveryFee
@@ -296,7 +308,33 @@ fun CheckOutScreenContent(totalAmount: Double) {
                     .background(Color.White)
             ) {
                 Button(
-                    onClick = { /* Implement checkout */ },
+                    onClick = {
+                        val invoiceId = generateInvoiceId()
+                        val invoiceData = mapOf(
+                            "invoiceId" to invoiceId,
+                            "date" to System.currentTimeMillis(),
+                            "items" to cartViewModel.cartItems.map { item ->
+                                mapOf(
+                                    "name" to item.product.name,
+                                    "price" to item.product.price,
+                                    "quantity" to item.quantity
+                                )
+                            }
+                        )
+                        val userEmail = FirebaseAuth.getInstance().currentUser?.email
+                        userEmail?.let {
+                            val firestore = FirebaseFirestore.getInstance()
+                            firestore.collection("invoices").document(it).collection("userInvoices").document(invoiceId)
+                                .set(invoiceData)
+                                .addOnSuccessListener {
+                                    Toast.makeText(context, "Checkout successful!", Toast.LENGTH_SHORT).show()
+                                    navController.navigate("checkout_success")
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(context, "Failed to save invoice: ${e.message}", Toast.LENGTH_SHORT).show()
+                                }
+                        }
+                    },
                     modifier = Modifier.width(screenWith * 0.92f).height(50.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF242424)),
                     shape = RoundedCornerShape(8.dp)
