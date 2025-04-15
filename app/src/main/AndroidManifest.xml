@@ -35,5 +35,6 @@
         <activity android:name=".ScreenBottom.CartScreen" />
         <activity android:name=".ScreenBottom.CheckOutScreen"/>
         <activity android:name=".ScreenBottom.CheckoutSuccessScreen" />
+        <activity android:name=".ScreenBottom.InvoiceDetailScreen"/>
     </application>
 </manifest>

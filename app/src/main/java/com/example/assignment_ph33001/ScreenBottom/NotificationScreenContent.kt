@@ -1,5 +1,6 @@
 package com.example.assignment_ph33001.ScreenBottom
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun NotificationScreenContent(navController: NavController) {
     val userEmail = FirebaseAuth.getInstance().currentUser?.email
     val invoices = remember { mutableStateListOf<Map<String, Any>>() }
+    val context = LocalContext.current
 
     LaunchedEffect(userEmail) {
         userEmail?.let {
@@ -59,7 +62,9 @@ fun NotificationScreenContent(navController: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .clickable {
-                        navController.navigate("invoice_detail/${invoice["invoiceId"]}")
+                        val intent = Intent(context, InvoiceDetailScreen::class.java)
+                        intent.putExtra("INVOICE_ID", invoice["invoiceId"]?.toString())
+                        context.startActivity(intent)
                     },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),

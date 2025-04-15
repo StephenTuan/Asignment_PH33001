@@ -77,6 +77,8 @@ fun CartScreenContent(cartViewModel: CartViewModel,navController: NavController?
     var promoCode by remember { mutableStateOf("") }
     val screenWith = LocalConfiguration.current.screenWidthDp.dp
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
